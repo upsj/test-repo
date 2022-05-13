@@ -13,6 +13,6 @@ jobs:
     - name: download
       run: git clone https://github.com/llvm/llvm-project --depth=1
     - name: configure
-      run: cmake -S llvm-project -B build "-DLLVM_ENABLE_PROJECTS=clang;compiler-rt"
+      run: cmake -S llvm-project/llvm -B build "-DLLVM_ENABLE_PROJECTS=clang;compiler-rt"
     - name: build
       run: cmake --build build --config Release -j3
