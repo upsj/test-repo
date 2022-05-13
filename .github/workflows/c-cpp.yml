@@ -11,8 +11,14 @@ jobs:
 
     steps:
     - name: download
-      run: git clone https://github.com/llvm/llvm-project --depth=1
+      run: git clone https://github.com/llvm/llvm-project --depth=1 --branch llvmorg-14.0.3
     - name: configure
-      run: cmake -S llvm-project/llvm -B build "-DLLVM_ENABLE_PROJECTS=clang;compiler-rt"
+      run: |
+        mkdir installed
+        cmake -S llvm-project/llvm -B build "-DLLVM_ENABLE_PROJECTS=clang;compiler-rt" "-DCMAKE_INSTALL_PREFIX=$pwd/installed"
     - name: build
-      run: cmake --build build --config Release -j3
+      run: cmake --build build --target install --config Release -j3
+    - uses: actions/upload-artifact@v3
+      with:
+        name: llvm-installed
+        path: installed
