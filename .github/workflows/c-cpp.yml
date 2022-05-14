@@ -10,6 +10,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
+    - uses: seanmiddleditch/gha-setup-ninja@master
     - name: download
       run: git clone https://github.com/llvm/llvm-project --depth=1 --branch llvmorg-14.0.3
     - name: configure
