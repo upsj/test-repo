@@ -5,22 +5,57 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  build-win:
 
     runs-on: windows-latest
 
     steps:
-    - uses: seanmiddleditch/gha-setup-ninja@master
     - name: download
       run: git clone https://github.com/llvm/llvm-project --depth=1 --branch llvmorg-14.0.3
     - name: configure
       run: |
         mkdir installed
-        cmake -GNinja -S llvm-project/llvm -B build -DCMAKE_BUILD_TYPE=Release "-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra" "-DCMAKE_INSTALL_PREFIX=$pwd/installed"
+        cmake -S llvm-project/llvm -B build -DCMAKE_BUILD_TYPE=Release "-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra" "-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded"
     - name: build
-      run: ninja -C build clang-format
+      run: cmake --build --target clang-format -j3
     - uses: actions/upload-artifact@v3
       with:
         name: llvm-binaries
-        path: |
-          build/bin
+        path: "build/bin/clang-format.exe"
+
+  build-linux:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: download
+      run: git clone https://github.com/llvm/llvm-project --depth=1 --branch llvmorg-14.0.3
+    - name: configure
+      run: |
+        mkdir installed
+        cmake -GNinja -S llvm-project/llvm -B build -DCMAKE_BUILD_TYPE=Release "-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra" "-DCMAKE_EXE_LINKER_FLAGS=-static-libstdc++ -static-libgcc"
+    - name: build
+      run: cmake --build --target clang-format -j3
+    - uses: actions/upload-artifact@v3
+      with:
+        name: llvm-binaries
+        path: "build/bin/clang-format"
+
+  build-macos-universal:
+
+    runs-on: macos-latest
+
+    steps:
+    - name: download
+      run: git clone https://github.com/llvm/llvm-project --depth=1 --branch llvmorg-14.0.3
+    - name: configure
+      run: |
+        mkdir installed
+        cmake -GNinja -S llvm-project/llvm -B build "-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64" -DCMAKE_BUILD_TYPE=Release "-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra" "-DCMAKE_EXE_LINKER_FLAGS=-static-libstdc++ -static-libgcc"
+    - name: build
+      run: cmake --build --target clang-format -j3
+    - uses: actions/upload-artifact@v3
+      with:
+        name: llvm-binaries
+        path: "build/bin/clang-format"
+
