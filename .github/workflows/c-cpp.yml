@@ -17,7 +17,7 @@ jobs:
         mkdir installed
         cmake -S llvm-project/llvm -B build -DCMAKE_BUILD_TYPE=Release "-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra" "-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded"
     - name: build
-      run: cmake --build --target clang-format -j3
+      run: cmake --build --target clang-format -j3 .
     - uses: actions/upload-artifact@v3
       with:
         name: llvm-binaries
@@ -33,9 +33,12 @@ jobs:
     - name: configure
       run: |
         mkdir installed
-        cmake -S llvm-project/llvm -B build -DCMAKE_BUILD_TYPE=Release "-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra" "-DCMAKE_EXE_LINKER_FLAGS=-static-libstdc++ -static-libgcc"
+        cmake -S llvm-project/llvm -B build \
+        -DCMAKE_BUILD_TYPE=Release \
+        "-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra" \
+        "-DCMAKE_EXE_LINKER_FLAGS=-static-libstdc++ -static-libgcc"
     - name: build
-      run: cmake --build --target clang-format -j3
+      run: cmake --build --target clang-format -j3 .
     - uses: actions/upload-artifact@v3
       with:
         name: llvm-binaries
@@ -51,9 +54,13 @@ jobs:
     - name: configure
       run: |
         mkdir installed
-        cmake -S llvm-project/llvm -B build "-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64" -DCMAKE_BUILD_TYPE=Release "-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra" "-DCMAKE_EXE_LINKER_FLAGS=-static-libstdc++ -static-libgcc"
+        cmake -S llvm-project/llvm -B build \
+        "-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64" \
+        -DCMAKE_BUILD_TYPE=Release \
+        "-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra" \
+        "-DCMAKE_EXE_LINKER_FLAGS=-static=rtlib -static=c++stdlib"
     - name: build
-      run: cmake --build --target clang-format -j3
+      run: cmake --build --target clang-format -j3 .
     - uses: actions/upload-artifact@v3
       with:
         name: llvm-binaries
