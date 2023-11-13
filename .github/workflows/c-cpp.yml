@@ -20,7 +20,7 @@ jobs:
       run: cmake --build build --config Release --target clang-format -j3
     - uses: actions/upload-artifact@v3
       with:
-        name: llvm-binaries
+        name: windows
         path: "build/bin/Release/clang-format.exe"
 
   build-linux:
@@ -41,7 +41,7 @@ jobs:
       run: cmake --build build --target clang-format -j3
     - uses: actions/upload-artifact@v3
       with:
-        name: llvm-binaries
+        name: linux
         path: "build/bin/clang-format"
 
   build-macos-universal:
@@ -62,6 +62,6 @@ jobs:
       run: cmake --build build --target clang-format -j3
     - uses: actions/upload-artifact@v3
       with:
-        name: llvm-binaries
+        name: macos
         path: "build/bin/clang-format"
 
