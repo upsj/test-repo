@@ -16,12 +16,11 @@ jobs:
     - name: configure
       run: |
         mkdir installed
-        cmake -GNinja -S llvm-project/llvm -B build -DCMAKE_BUILD_TYPE=Release "-DLLVM_ENABLE_PROJECTS=clang;compiler-rt" "-DCMAKE_INSTALL_PREFIX=$pwd/installed"
+        cmake -GNinja -S llvm-project/llvm -B build -DCMAKE_BUILD_TYPE=Release "-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra" "-DCMAKE_INSTALL_PREFIX=$pwd/installed"
     - name: build
-      run: cmake --build build -j3
+      run: ninja -C build clang-format
     - uses: actions/upload-artifact@v3
       with:
         name: llvm-binaries
         path: |
           build/bin
-          build/lib
