@@ -15,13 +15,13 @@ jobs:
     - name: configure
       run: |
         mkdir installed
-        cmake -S llvm-project/llvm -B build -DCMAKE_BUILD_TYPE=Release "-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra" "-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded"
+        cmake -S llvm-project/llvm -B build "-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra" "-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded"
     - name: build
-      run: cmake --build build --target clang-format -j3
+      run: cmake --build build --config Release --target clang-format -j3
     - uses: actions/upload-artifact@v3
       with:
         name: llvm-binaries
-        path: "build/bin/clang-format.exe"
+        path: "build/bin/Release/clang-format.exe"
 
   build-linux:
 
