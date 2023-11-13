@@ -33,7 +33,7 @@ jobs:
     - name: configure
       run: |
         mkdir installed
-        cmake -GNinja -S llvm-project/llvm -B build -DCMAKE_BUILD_TYPE=Release "-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra" "-DCMAKE_EXE_LINKER_FLAGS=-static-libstdc++ -static-libgcc"
+        cmake -S llvm-project/llvm -B build -DCMAKE_BUILD_TYPE=Release "-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra" "-DCMAKE_EXE_LINKER_FLAGS=-static-libstdc++ -static-libgcc"
     - name: build
       run: cmake --build --target clang-format -j3
     - uses: actions/upload-artifact@v3
@@ -51,7 +51,7 @@ jobs:
     - name: configure
       run: |
         mkdir installed
-        cmake -GNinja -S llvm-project/llvm -B build "-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64" -DCMAKE_BUILD_TYPE=Release "-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra" "-DCMAKE_EXE_LINKER_FLAGS=-static-libstdc++ -static-libgcc"
+        cmake -S llvm-project/llvm -B build "-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64" -DCMAKE_BUILD_TYPE=Release "-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra" "-DCMAKE_EXE_LINKER_FLAGS=-static-libstdc++ -static-libgcc"
     - name: build
       run: cmake --build --target clang-format -j3
     - uses: actions/upload-artifact@v3
